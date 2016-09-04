@@ -1,0 +1,110 @@
+-- modules
+local Class = require('lib.middleclass')
+local Vector = require('lib.vector')
+local Timer = require('lib.timer')
+local Suit = require('lib.suit')
+
+-- source
+local Node, Fractal = require('fractal')()
+
+-- settings
+Setting = {}
+Setting.animation = {}
+Setting.animation.duration = 0.5
+Setting.animation.enabled = false
+
+-- default fractal
+local fractal = Fractal(love.graphics.getWidth() / 2, love.graphics.getHeight() - 100, 150, 0.6, math.rad(60))
+
+-- modified gui theme
+Suit.theme.cornerRadius = 0
+
+-- input widgets
+local input = {}
+input.scale = {text = '0.6'}
+input.angle = {text = '60'}
+input.step = {text = '1'}
+input.duration = {text = tostring(Setting.animation.duration)}
+
+-- checkbox widget
+local checkbox = {}
+checkbox.animation = {text = 'Enabled', checked = Setting.animation.enabled}
+
+function love.update(dt)
+    Timer.update(dt)
+
+    -- the gui layout
+    Suit.layout:reset(0, 0, 0, 0)
+
+    -- Panel: fractal settings
+    Suit.Label('Settings', Suit.layout:row(125, 40))
+
+    -- input for scale
+    Suit.layout:push(Suit.layout:row())
+        Suit.Label('Scale', {align = 'left'}, Suit.layout:col(75, 40))
+        Suit.Input(input.scale, Suit.layout:col(50))
+    Suit.layout:pop()
+
+    -- input for angle
+    Suit.layout:push(Suit.layout:row())
+        Suit.Label('Angle', {align = 'left'}, Suit.layout:col(75, 40))
+        Suit.Input(input.angle, Suit.layout:col(50))
+    Suit.layout:pop()
+
+    -- button, which creates a new fractal with given scale and angle
+    if Suit.Button('Apply', {id = 1}, Suit.layout:row(125, 40)).hit then
+        fractal = Fractal(love.graphics.getWidth() / 2, love.graphics.getHeight() - 100, 150, input.scale.text, math.rad(input.angle.text))
+    end
+
+    -- Panel: actions
+    Suit.Label('Actions', Suit.layout:row())
+
+    -- input for iterating steps
+    Suit.layout:push(Suit.layout:row())
+        Suit.Label('Steps', {align = 'left'}, Suit.layout:col(75, 40))
+        Suit.Input(input.step, Suit.layout:col(50))
+    Suit.layout:pop()
+
+    -- button, which iterates the fractal with the given steps
+    if Suit.Button('Iterate', Suit.layout:row()).hit then
+        if Setting.animation.enabled then
+            Timer.every(Setting.animation.duration, function() fractal:iterate() end, tonumber(input.step.text))
+        else
+            for i = 1, tonumber(input.step.text) do fractal:iterate() end
+        end
+    end
+
+    -- Panel: animation settings
+    Suit.Label('Animation', Suit.layout:row())
+
+    -- checkbox, which enables or disable animations
+    Suit.Checkbox(checkbox.animation, Suit.layout:row())
+
+    -- input for animation duration (if enabled)
+    Suit.layout:push(Suit.layout:row())
+        Suit.Label('Duration', {align = 'left'}, Suit.layout:col(75, 40))
+        Suit.Input(input.duration, Suit.layout:col(50))
+    Suit.layout:pop()
+
+    -- button, which applies duation and animation enabling to (node-)settings
+    if Suit.Button('Apply', {id = 2}, Suit.layout:row()).hit then
+        Setting.animation.duration = tonumber(input.duration.text)
+        Node.animation.duration = tonumber(input.duration.text)
+        Setting.animation.enabled = checkbox.animation.checked
+        Node.animation.enabled = Setting.animation.enabled
+    end
+end
+
+function love.draw()
+    fractal:draw()
+    Suit.draw()
+end
+
+function love.textinput(t)
+    Suit.textinput(t)
+end
+
+function love.keypressed(key)
+    Suit.keypressed(key)
+end
+
