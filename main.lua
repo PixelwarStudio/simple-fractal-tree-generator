@@ -13,15 +13,25 @@ Setting.animation = {}
 Setting.animation.duration = 0.5
 Setting.animation.enabled = false
 
--- default fractal
-local fractal = Fractal(love.graphics.getWidth() / 2, love.graphics.getHeight() - 100, 150, 0.6, math.rad(60))
-
 -- modified gui theme
 Suit.theme.cornerRadius = 0
 
 local section = {}
-section.options = {x = 0, y = 0, width = 125}
-section.info = {x = love.graphics.getWidth() - 125, y = 0, width = 125}
+section.options = {
+    x = 0,
+    y = 0, 
+    width = 125
+}
+section.info = {
+    x = love.graphics.getWidth() - 125,
+    y = 0,
+    width = 125
+}
+section.fractal = {
+    x = section.options.x + section.options.width,
+    y = 0, 
+    width = love.graphics.getWidth() - section.info.width - section.options.width
+}
 
 -- input widgets
 local input = {}
@@ -33,6 +43,9 @@ input.duration = {text = tostring(Setting.animation.duration)}
 -- checkbox widget
 local checkbox = {}
 checkbox.animation = {text = 'Enabled', checked = Setting.animation.enabled}
+
+-- default fractal
+local fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), 150, 0.6, math.rad(60))
 
 function love.update(dt)
     Timer.update(dt)
