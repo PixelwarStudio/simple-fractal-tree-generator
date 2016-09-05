@@ -76,7 +76,7 @@ end
 
 function Fractal:iterate()
     local olderNodes = #self.nodes
-    for n = 0, calcNodes(self.iter - 1) - 1 do
+    for n = 0, calcNodes(self.iter) - 1 do
         local pos, dim = self.nodes[olderNodes - n]:unpack()
         local trimDim = dim:trimmed(dim:len() * self.scale)
 
