@@ -46,14 +46,14 @@ function love.update(dt)
 
     -- input for scale
     Suit.layout:push(Suit.layout:row())
-        Suit.Label('Scale', {align = 'left'}, Suit.layout:col(75, 40))
-        Suit.Input(input.scale, Suit.layout:col(50))
+        Suit.Label('Scale', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+        Suit.Input(input.scale, Suit.layout:col(section.options.width * 0.4))
     Suit.layout:pop()
 
     -- input for angle
     Suit.layout:push(Suit.layout:row())
-        Suit.Label('Angle', {align = 'left'}, Suit.layout:col(75, 40))
-        Suit.Input(input.angle, Suit.layout:col(50))
+        Suit.Label('Angle', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+        Suit.Input(input.angle, Suit.layout:col(section.options.width * 0.4))
     Suit.layout:pop()
 
     -- button, which creates a new fractal with given scale and angle
@@ -66,8 +66,8 @@ function love.update(dt)
 
     -- input for iterating steps
     Suit.layout:push(Suit.layout:row())
-        Suit.Label('Steps', {align = 'left'}, Suit.layout:col(75, 40))
-        Suit.Input(input.step, Suit.layout:col(50))
+        Suit.Label('Steps', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+        Suit.Input(input.step, Suit.layout:col(section.options.width * 0.4))
     Suit.layout:pop()
 
     -- button, which iterates the fractal with the given steps
@@ -87,8 +87,8 @@ function love.update(dt)
 
     -- input for animation duration (if enabled)
     Suit.layout:push(Suit.layout:row())
-        Suit.Label('Duration', {align = 'left'}, Suit.layout:col(75, 40))
-        Suit.Input(input.duration, Suit.layout:col(50))
+        Suit.Label('Duration', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+        Suit.Input(input.duration, Suit.layout:col(section.options.width * 0.4))
     Suit.layout:pop()
 
     -- button, which applies duation and animation enabling to (node-)settings
@@ -100,7 +100,7 @@ function love.update(dt)
     end
 
     -- information section
-    --Suit.layout:reset(section.info.x, section.info.y)
+    Suit.layout:reset(section.info.x, section.info.y)
     Suit.Label('Informations', Suit.layout:row(section.info.width, 40))
     Suit.Label(string.format('Iteration: %s', fractal.iter), {align = 'left'}, Suit.layout:row())
     Suit.Label(string.format('Nodes: %s', fractal:calcNodes()), {align = 'left'}, Suit.layout:row())
