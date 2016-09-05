@@ -43,7 +43,7 @@ function Fractal:initialize(x, y, length, scale, angle)
     self.scale = scale
     self.angle = angle
 
-    self.iter = 1
+    self.iter = 0
     self.nodes = {
         Node(self.pos, Vector(0, -length))
     }
@@ -53,7 +53,11 @@ local function calcNodes(iteration)
     return math.pow(2, iteration)
 end
 
--- TODO: improve dimension calculation
+function Fractal:calcNodes()
+    return calcNodes(self.iter)
+end
+
+-- FIXME: improve dimension calculations
 local function calcDim(iter, len, scale, angle)
     local width, height = 0, 0
     

@@ -19,6 +19,10 @@ local fractal = Fractal(love.graphics.getWidth() / 2, love.graphics.getHeight() 
 -- modified gui theme
 Suit.theme.cornerRadius = 0
 
+local section = {}
+section.options = {x = 0, y = 0, width = 125}
+section.info = {x = love.graphics.getWidth() - 125, y = 0, width = 125}
+
 -- input widgets
 local input = {}
 input.scale = {text = '0.6'}
@@ -34,10 +38,11 @@ function love.update(dt)
     Timer.update(dt)
 
     -- the gui layout
-    Suit.layout:reset(0, 0, 0, 0)
+    -- options section
+    Suit.layout:reset(section.options.x, section.options.y)
 
     -- Panel: fractal settings
-    Suit.Label('Settings', Suit.layout:row(125, 40))
+    Suit.Label('Settings', Suit.layout:row(section.options.width, 40))
 
     -- input for scale
     Suit.layout:push(Suit.layout:row())
@@ -52,7 +57,7 @@ function love.update(dt)
     Suit.layout:pop()
 
     -- button, which creates a new fractal with given scale and angle
-    if Suit.Button('Apply', {id = 1}, Suit.layout:row(125, 40)).hit then
+    if Suit.Button('Apply', {id = 1}, Suit.layout:row()).hit then
         fractal = Fractal(love.graphics.getWidth() / 2, love.graphics.getHeight() - 100, 150, input.scale.text, math.rad(input.angle.text))
     end
 
@@ -93,6 +98,12 @@ function love.update(dt)
         Setting.animation.enabled = checkbox.animation.checked
         Node.animation.enabled = Setting.animation.enabled
     end
+
+    -- information section
+    --Suit.layout:reset(section.info.x, section.info.y)
+    Suit.Label('Informations', Suit.layout:row(section.info.width, 40))
+    Suit.Label(string.format('Iteration: %s', fractal.iter), {align = 'left'}, Suit.layout:row())
+    Suit.Label(string.format('Nodes: %s', fractal:calcNodes()), {align = 'left'}, Suit.layout:row())
 end
 
 function love.draw()
