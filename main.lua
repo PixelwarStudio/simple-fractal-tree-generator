@@ -13,8 +13,13 @@ Setting.animation = {}
 Setting.animation.duration = 0.5
 Setting.animation.enabled = false
 
--- modified gui theme
+-- gui theme
 Suit.theme.cornerRadius = 0
+Suit.theme.color = {
+    normal  = {bg = {218, 40, 40}, fg = {0, 0, 0}},
+    hovered = {bg = {218, 22, 22}, fg = {0, 0, 0}},
+    active  = {bg = {218, 6, 6}, fg = {0, 0, 0}}
+}
 
 local section = {}
 section.options = {
@@ -119,14 +124,22 @@ function love.update(dt)
         Node.animation.enabled = Setting.animation.enabled
     end
 
+    _, section.options.height = Suit.layout:nextRow()
+
     -- information section
     Suit.layout:reset(section.info.x, section.info.y)
     Suit.Label('Informations', Suit.layout:row(section.info.width, 40))
     Suit.Label(string.format('Iteration: %s', fractal.iter), {align = 'left'}, Suit.layout:row())
     Suit.Label(string.format('Nodes: %s', fractal:calcNodes()), {align = 'left'}, Suit.layout:row())
+
+    _, section.info.height = Suit.layout:nextRow()
 end
 
 function love.draw()
+    love.graphics.setColor({255, 255, 255})
+    love.graphics.rectangle('fill', section.options.x, section.options.y, section.options.width, section.options.height)
+    love.graphics.rectangle('fill', section.info.x, section.info.y, section.info.width, section.info.height)
+    love.graphics.setBackgroundColor({231, 231, 231})
     fractal:draw()
     Suit.draw()
 end
