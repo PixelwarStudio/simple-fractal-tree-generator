@@ -75,11 +75,11 @@ local function calcDistToMid(iter, len, scale, angle)
 
     return dist
 end
-
+-- TODO: Doesnt work
 function Fractal:calcDim()
     return calcDim(self.iter, self.len, self.scale, self.angle)
 end
-
+-- TODO: Doesnt work
 function Fractal:calcDistToMid()
     return calcDistToMid(self.iter, self.len, self.scale, self.angle)
 end
