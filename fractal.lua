@@ -6,16 +6,16 @@ local Timer = require('lib.timer')
 -- Objects
 -- Node
 local Node = Class('Node')
+Node.static.color = {0, 0, 0}
 Node.static.animation = {}
 Node.static.animation.enabled = false
 Node.static.animation.duration = 0.5
-function Node:initialize(pos, dim, color, width)
+function Node:initialize(pos, dim, width)
     self.pos = pos:clone()
     self.dim = dim:clone()
 
     self.dimAnim = {x = 0, y = 0}
 
-    self.color = color or {255,255,255}
     self.width = width or 1
     if Node.static.animation.enabled then
         Timer.tween(Node.animation.duration, self, {dimAnim = {x = dim.x}})
@@ -31,7 +31,7 @@ end
 
 function Node:draw()
     love.graphics.setLineWidth(self.width)
-    love.graphics.setColor(self.color)
+    love.graphics.setColor(Node.color)
     love.graphics.line(self.pos.x, self.pos.y, self.pos.x + self.dimAnim.x, self.pos.y + self.dimAnim.y)
 end
 
