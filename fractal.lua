@@ -53,6 +53,7 @@ local function calcNodes(iteration)
     return math.pow(2, iteration)
 end
 
+-- TODO: improve dimension calculation
 local function calcDim(iter, len, scale, angle)
     local width, height = 0, 0
     
@@ -65,23 +66,8 @@ local function calcDim(iter, len, scale, angle)
     return 2 * width, height
 end
 
-local function calcDistToMid(iter, len, scale, angle)
-    local dist = len * scale
-
-    for i = 3, iter - 1, 1 do
-        local nodeLen = len * math.pow(scale, i)
-        dist = dist - (i % 2 == 1 and nodeLen * math.sin(angle) or 0)
-    end
-
-    return dist
-end
--- TODO: Doesnt work
 function Fractal:calcDim()
     return calcDim(self.iter, self.len, self.scale, self.angle)
-end
--- TODO: Doesnt work
-function Fractal:calcDistToMid()
-    return calcDistToMid(self.iter, self.len, self.scale, self.angle)
 end
 
 function Fractal:iterate()
