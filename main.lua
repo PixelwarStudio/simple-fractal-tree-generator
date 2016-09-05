@@ -35,6 +35,7 @@ section.fractal = {
 
 -- input widgets
 local input = {}
+input.length = {text = '150'}
 input.scale = {text = '0.6'}
 input.angle = {text = '60'}
 input.step = {text = '1'}
@@ -57,6 +58,12 @@ function love.update(dt)
     -- Panel: fractal settings
     Suit.Label('Settings', Suit.layout:row(section.options.width, 40))
 
+    -- input for start length
+    Suit.layout:push(Suit.layout:row())
+        Suit.Label('Length', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+        Suit.Input(input.length, Suit.layout:col(section.options.width * 0.4))
+    Suit.layout:pop()
+
     -- input for scale
     Suit.layout:push(Suit.layout:row())
         Suit.Label('Scale', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
@@ -71,7 +78,7 @@ function love.update(dt)
 
     -- button, which creates a new fractal with given scale and angle
     if Suit.Button('Apply', {id = 1}, Suit.layout:row()).hit then
-        fractal = Fractal(love.graphics.getWidth() / 2, love.graphics.getHeight() - 100, 150, input.scale.text, math.rad(input.angle.text))
+        fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), input.length.text, input.scale.text, math.rad(input.angle.text))
     end
 
     -- Panel: actions
