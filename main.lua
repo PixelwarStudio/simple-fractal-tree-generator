@@ -131,6 +131,9 @@ function love.update(dt)
     Suit.Label('Informations', Suit.layout:row(section.info.width, 40))
     Suit.Label(string.format('Iteration: %s', fractal.iter), {align = 'left'}, Suit.layout:row())
     Suit.Label(string.format('Nodes: %s', fractal:calcNodes()), {align = 'left'}, Suit.layout:row())
+    Suit.Label(string.format('Angle: %s', math.deg(fractal.angle)), {align = 'left'}, Suit.layout:row())
+    Suit.Label(string.format('Scale: %s', fractal.scale), {align = 'left'}, Suit.layout:row())
+    Suit.Label(string.format('Strain length: %s', fractal.len), {align = 'left'}, Suit.layout:row())
 
     _, section.info.height = Suit.layout:nextRow()
 end
