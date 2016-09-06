@@ -10,7 +10,7 @@ Also the tool provides some simple animation settings for a little bit eyecandy.
 
 ## Future Features
 + Export (svg, png, gif)
-+ Zoom and fractal handling
++ Zoom
 
 ## Properties
 | Property | What it does | Recommended values |
