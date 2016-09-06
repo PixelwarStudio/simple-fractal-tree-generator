@@ -1,5 +1,6 @@
 # Simple fractal tree generator
 ## Description
+Made with [love](https://love2d.org/).
 This is very simple fractal tree generator.
 You can modify some properties to edit the appearence of the fractal in a surprising way.
 Also the tool provides some simple animation settings for a little bit eyecandy.
@@ -20,7 +21,6 @@ Also the tool provides some simple animation settings for a little bit eyecandy.
 | Scale | Sets how the boughs scales from iteration to iteration  | 0.55 - 0.7 |
 
 ## Third-party-libraries
-+ SUIT
-+ HUMP (Vector, Timer)
-+ Middleclass
-
++ [SUIT](https://github.com/vrld/SUIT)
++ [HUMP (Vector, Timer)](https://github.com/vrld/hump)
++ [Middleclass](https://github.com/kikito/middleclass)
