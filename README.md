@@ -3,6 +3,12 @@
 This is very simple fractal tree generator.
 You can modify some properties to edit the appearence of the fractal in a surprising way.
 Also the tool provides some simple animation settings for a little bit eyecandy.
+## Features
++ Simple gui
++ Easy to use
++ High variety of result trees
+## Future Features
++ Export (svg, png, gif)
 ## Properties
 | Property | What it does | Recommended values |
 | ------------- | ------------- | --------- |
