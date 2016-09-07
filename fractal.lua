@@ -49,6 +49,10 @@ function Fractal:initialize(x, y, length, scale, angle)
     }
 end
 
+local function calcNodeLen(iteration, startLength, scale)
+    return startLength * math.pow(scale, iteration)
+end
+
 local function calcNodes(iteration)
     return math.pow(2, iteration)
 end
