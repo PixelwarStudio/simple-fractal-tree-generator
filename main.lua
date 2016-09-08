@@ -147,6 +147,12 @@ function love.draw()
     Suit.draw()
 end
 
+function love.resize(width, height)
+    section.info.x = width - 125
+    section.fractal.width = width - section.info.width - section.options.width
+    fractal:move(section.fractal.x + section.fractal.width / 2 - fractal.pos.x, height - fractal.pos.y)
+end
+
 function love.textinput(t)
     Suit.textinput(t)
 end
