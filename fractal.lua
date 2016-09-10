@@ -60,9 +60,11 @@ function Fractal:calcDim()
     self.dim = {x = 0, y = 0}
 
     for n = 0, self.iter do
-        local node = self.nodes[calcNodes(n)]
-        self.dim.x = self.dim.x + math.abs(node.dim.x)
-        self.dim.y = self.dim.y + math.abs(node.dim.y)
+        local xNode = self.nodes[(n == 0 and 0 or 1) + calcNodes(n)]
+        local yNode = self.nodes[calcNodes(n)]
+        
+        self.dim.x = self.dim.x + math.abs(xNode.dim.x)
+        self.dim.y = self.dim.y + math.abs(yNode.dim.y)
     end
     return self.dim.x * 2, self.dim.y
 end
@@ -88,12 +90,15 @@ end
 function Fractal:toImageData()
     local width, height = self:calcDim()
     local canvas = love.graphics.newCanvas(width, height)
-    -- local imageData = love.image.newImageData(width, height)
+    local fractal = Fractal(width / 2, height, self.len, self.scale, self.angle)
+
+    for i = 1, self.iter do fractal:iterate() end
+
     love.graphics.setCanvas(canvas)
-        self:draw()
+        fractal:draw()
     love.graphics.setCanvas()
 
-    return Canvas:newImageData()
+    return canvas:newImageData()
 end
 
 function Fractal:move(x, y)
