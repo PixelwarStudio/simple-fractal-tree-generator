@@ -61,21 +61,15 @@ function Fractal:calcNodes()
     return calcNodes(self.iter)
 end
 
--- FIXME: improve dimension calculations
-local function calcDim(iter, len, scale, angle)
-    local width, height = 0, 0
-    
-    for i = 0, iter - 1 do
-        local nodeLen = len * math.pow(scale, i)
-        width = width + (i % 2 == 1 and nodeLen * math.sin(angle) or 0)
-        height = height + nodeLen * (i % 2 == 1 and math.cos(angle) or 1)
-    end
-
-    return 2 * width, height
-end
-
 function Fractal:calcDim()
-    return calcDim(self.iter, self.len, self.scale, self.angle)
+    self.dim = {x = 0, y = 0}
+
+    for n = 0, self.iter do
+        local node = self.nodes[calcNodes(n)]
+        self.dim.x = self.dim.x + math.abs(node.dim.x)
+        self.dim.y = self.dim.y + math.abs(node.dim.y)
+    end
+    return self.dim.x * 2, self.dim.y
 end
 
 function Fractal:iterate()
