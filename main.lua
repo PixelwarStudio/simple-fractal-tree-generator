@@ -126,6 +126,7 @@ function love.update(dt)
 
     Suit.Label('Export', Suit.layout:row())
     if Suit.Button('Bitmap', Suit.layout:row()).hit then
+        fractal:toImageData():encode('png', 'format.png')
     end
 
     if Suit.Button('Vector', Suit.layout:row()).hit then
