@@ -147,11 +147,11 @@ function love.update(dt)
 end
 
 function love.draw()
+    fractal:draw()
     love.graphics.setColor({255, 255, 255})
     love.graphics.rectangle('fill', section.options.x, section.options.y, section.options.width, section.options.height)
     love.graphics.rectangle('fill', section.info.x, section.info.y, section.info.width, section.info.height)
     love.graphics.setBackgroundColor({231, 231, 231})
-    fractal:draw()
     Suit.draw()
 end
 
