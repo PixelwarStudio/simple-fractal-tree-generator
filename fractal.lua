@@ -16,7 +16,6 @@ function Node:initialize(pos, dim, width)
 
     self.dimAnim = {x = 0, y = 0}
 
-    self.width = width or 1
     if Node.static.animation.enabled then
         Timer.tween(Node.animation.duration, self, {dimAnim = {x = dim.x}})
         Timer.tween(Node.animation.duration, self, {dimAnim = {y = dim.y}})
@@ -26,7 +25,7 @@ function Node:initialize(pos, dim, width)
 end
 
 function Node:unpack()
-    return self.pos, self.dim, self.color, self.width
+    return self.pos, self.dim, self.color
 end
 
 function Node:draw()
