@@ -85,6 +85,17 @@ function Fractal:draw()
     end
 end
 
+function Fractal:toImageData()
+    local width, height = self:calcDim()
+    local canvas = love.graphics.newCanvas(width, height)
+    -- local imageData = love.image.newImageData(width, height)
+    love.graphics.setCanvas(canvas)
+        self:draw()
+    love.graphics.setCanvas()
+
+    return Canvas:newImageData()
+end
+
 function Fractal:move(x, y)
     self.pos.x, self.pos.y = self.pos.x + x, self.pos.y + y
     for n = 1, #self.nodes do
