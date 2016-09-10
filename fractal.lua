@@ -29,7 +29,7 @@ function Node:unpack()
 end
 
 function Node:draw()
-    love.graphics.setLineWidth(self.width)
+    love.graphics.setLineWidth(1)
     love.graphics.setColor(Node.color)
     love.graphics.line(self.pos.x, self.pos.y, self.pos.x + self.dimAnim.x, self.pos.y + self.dimAnim.y)
 end
@@ -46,10 +46,6 @@ function Fractal:initialize(x, y, length, scale, angle)
     self.nodes = {
         Node(self.pos, Vector(0, -length))
     }
-end
-
-local function calcNodeLen(iteration, startLength, scale)
-    return startLength * math.pow(scale, iteration)
 end
 
 local function calcNodes(iteration)
