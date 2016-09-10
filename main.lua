@@ -128,6 +128,9 @@ function love.update(dt)
     if Suit.Button('Bitmap', Suit.layout:row()).hit then
     end
 
+    if Suit.Button('Vector', Suit.layout:row()).hit then
+    end
+
     _, section.options.height = Suit.layout:nextRow()
 
     -- information section
