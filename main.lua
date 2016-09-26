@@ -129,9 +129,6 @@ function love.update(dt)
         fractal:toImageData():encode('png', 'format.png')
     end
 
-    if Suit.Button('Vector', Suit.layout:row()).hit then
-    end
-
     _, section.options.height = Suit.layout:nextRow()
 
     -- information section
