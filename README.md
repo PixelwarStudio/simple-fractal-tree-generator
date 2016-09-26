@@ -15,7 +15,7 @@ Also the tool provides some simple animation settings for a little bit eyecandy.
 + High variety of possible result trees with only 2 real params
 
 ## Planned Features
-+ Export (svg, png, gif)
++ Export
 
 ## Third-party-libraries
 + [SUIT](https://github.com/vrld/SUIT)
