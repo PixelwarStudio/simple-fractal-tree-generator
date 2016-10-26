@@ -44,6 +44,7 @@ input.length = {text = '150'}
 input.scale = {text = '0.6'}
 input.angle = {text = '60'}
 input.step = {text = '1'}
+input.branches = {text = '2'}
 input.duration = {text = tostring(Setting.animation.duration)}
 
 -- checkbox widget
@@ -51,7 +52,7 @@ local checkbox = {}
 checkbox.animation = {text = 'Enabled', checked = Setting.animation.enabled}
 
 -- default fractal
-local fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), 150, 0.6, math.rad(60))
+local fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), 150, 0.6, math.rad(60), 2)
 
 function love.update(dt)
     Timer.update(dt)
@@ -81,9 +82,14 @@ function love.update(dt)
         Suit.Input(input.angle, Suit.layout:col(section.options.width * 0.4))
     Suit.layout:pop()
 
+    Suit.layout:push(Suit.layout:row())
+        Suit.Label('Branches per Iteration', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+        Suit.Input(input.branches, Suit.layout:col(section.options.width * 0.4))
+    Suit.layout:pop()
+
     -- button, which creates a new fractal with given scale and angle
     if Suit.Button('Apply', {id = 1}, Suit.layout:row()).hit then
-        fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), input.length.text, input.scale.text, math.rad(input.angle.text))
+        fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), input.length.text, input.scale.text, math.rad(input.angle.text), input.branches.text)
     end
 
     -- Panel: actions
