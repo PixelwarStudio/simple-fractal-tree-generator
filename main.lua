@@ -130,11 +130,6 @@ function love.update(dt)
         Node.animation.enabled = Setting.animation.enabled
     end
 
-    Suit.Label('Export', Suit.layout:row())
-    if Suit.Button('Bitmap', Suit.layout:row()).hit then
-        fractal:toImageData():encode('png', 'format.png')
-    end
-
     _, section.options.height = Suit.layout:nextRow()
 
     -- information section
