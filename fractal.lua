@@ -57,19 +57,6 @@ function Fractal:calcNodes()
     return calcNodes(self.branches, self.iter)
 end
 
-function Fractal:calcDim()
-    self.dim = {x = 0, y = 0}
-
-    for n = 0, self.iter do
-        local xNode = self.nodes[(n == 0 and 0 or 1) + calcNodes(n)]
-        local yNode = self.nodes[calcNodes(n)]
-        
-        self.dim.x = self.dim.x + math.abs(xNode.dim.x)
-        self.dim.y = self.dim.y + math.abs(yNode.dim.y)
-    end
-    return self.dim.x * 2, self.dim.y
-end
-
 function Fractal:iterate()
     local olderNodes = #self.nodes
     for n = 0, calcNodes(self.branches, self.iter) - 1 do
@@ -87,28 +74,6 @@ end
 function Fractal:draw()
     for n = 1, #self.nodes do
         self.nodes[n]:draw()
-    end
-end
-
-function Fractal:toImageData()
-    local width, height = self:calcDim()
-    local canvas = love.graphics.newCanvas(width, height)
-    local fractal = Fractal(width / 2, height, self.len, self.scale, self.angle)
-
-    for i = 1, self.iter do fractal:iterate() end
-
-    love.graphics.setCanvas(canvas)
-        fractal:draw()
-    love.graphics.setCanvas()
-
-    return canvas:newImageData()
-end
-
-function Fractal:move(x, y)
-    self.pos.x, self.pos.y = self.pos.x + x, self.pos.y + y
-    for n = 1, #self.nodes do
-        local node = self.nodes[n]
-        node.pos.x, node.pos.y = node.pos.x + x, node.pos.y + y
     end
 end
 
