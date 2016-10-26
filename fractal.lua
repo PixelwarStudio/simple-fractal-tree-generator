@@ -77,4 +77,12 @@ function Fractal:draw()
     end
 end
 
+function Fractal:move(x, y)
+    self.pos.x, self.pos.y = self.pos.x + x, self.pos.y + y
+    for n = 1, #self.nodes do
+        local node = self.nodes[n]
+        node.pos.x, node.pos.y = node.pos.x + x, node.pos.y + y
+    end
+end
+
 return function() return Node, Fractal end
