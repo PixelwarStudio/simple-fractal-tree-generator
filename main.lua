@@ -1,6 +1,5 @@
 -- modules
 local Class = require('lib.middleclass')
-local Vector = require('lib.vector')
 local Timer = require('lib.timer')
 local Suit = require('lib.suit')
 
