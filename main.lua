@@ -2,12 +2,11 @@
 local Class = require('lib.middleclass')
 local Timer = require('lib.timer')
 local Suit = require('lib.suit')
-
 -- source
 local Node, Fractal = require('fractal')()
 
 -- settings
-Setting = {}
+local Setting = {}
 Setting.animation = {}
 Setting.animation.duration = 0.5
 Setting.animation.enabled = false
@@ -40,7 +39,7 @@ section.fractal = {
 -- input widgets
 local input = {}
 input.length = {text = '150'}
-input.scale = {text = '0.6'}
+input.scale = {text = '0.5'}
 input.angle = {text = '60'}
 input.step = {text = '1'}
 input.branches = {text = '2'}
@@ -51,7 +50,7 @@ local checkbox = {}
 checkbox.animation = {text = 'Enabled', checked = Setting.animation.enabled}
 
 -- default fractal
-local fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), 150, 0.6, math.rad(60), 2)
+local fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), 150, 0.5, math.rad(60), 2)
 
 function love.update(dt)
     Timer.update(dt)
@@ -81,13 +80,14 @@ function love.update(dt)
         Suit.Input(input.angle, Suit.layout:col(section.options.width * 0.4))
     Suit.layout:pop()
 
+    -- input for branches
     Suit.layout:push(Suit.layout:row())
         Suit.Label('Branches per Iteration', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
         Suit.Input(input.branches, Suit.layout:col(section.options.width * 0.4))
     Suit.layout:pop()
 
     -- button, which creates a new fractal with given scale and angle
-    if Suit.Button('Apply', {id = 1}, Suit.layout:row()).hit then
+    if Suit.Button('New', Suit.layout:row()).hit then
         fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), input.length.text, input.scale.text, math.rad(input.angle.text), input.branches.text)
     end
 
@@ -116,13 +116,15 @@ function love.update(dt)
     Suit.Checkbox(checkbox.animation, Suit.layout:row())
 
     -- input for animation duration (if enabled)
-    Suit.layout:push(Suit.layout:row())
-        Suit.Label('Duration', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
-        Suit.Input(input.duration, Suit.layout:col(section.options.width * 0.4))
-    Suit.layout:pop()
+    if checkbox.animation.checked then
+        Suit.layout:push(Suit.layout:row())
+            Suit.Label('Duration', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+            Suit.Input(input.duration, Suit.layout:col(section.options.width * 0.4))
+        Suit.layout:pop()
+    end
 
-    -- button, which applies duation and animation enabling to (node-)settings
-    if Suit.Button('Apply', {id = 2}, Suit.layout:row()).hit then
+    -- button, which applies duration and animation enabling to (node-)settings
+    if Suit.Button('Apply', Suit.layout:row()).hit then
         Setting.animation.duration = tonumber(input.duration.text)
         Node.animation.duration = tonumber(input.duration.text)
         Setting.animation.enabled = checkbox.animation.checked
@@ -153,7 +155,7 @@ function love.draw()
 end
 
 function love.resize(width, height)
-    section.info.x = width - 125
+    section.info.x = width - section.info.width
     section.fractal.width = width - section.info.width - section.options.width
     fractal:move(section.fractal.x + section.fractal.width / 2 - fractal.pos.x, height - fractal.pos.y)
 end
