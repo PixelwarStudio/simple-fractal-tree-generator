@@ -53,8 +53,6 @@ function love.load()
 end
 
 function love.update(dt)
-    Timer.update(dt)
-
     -- the gui layout
     -- Controlbar
     Suit.layout:reset(section.actions.x, section.actions.y)
@@ -119,7 +117,7 @@ function love.resize(width, height)
     -- move fractal
     section.fractal.width = width
     section.fractal.height = height
-    fractal:move(width / 2, height - fractal.pos.y)
+    fractal:move(width / 2, height)
 
     -- move controllbar
 end
