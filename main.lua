@@ -1,15 +1,9 @@
 -- modules
 local Class = require('lib.middleclass')
-local Timer = require('lib.timer')
 local Suit = require('lib.suit')
+
 -- source
 local Node, Fractal = require('fractal')()
-
--- settings
-local Setting = {}
-Setting.animation = {}
-Setting.animation.duration = 0.5
-Setting.animation.enabled = false
 
 -- gui theme
 Suit.theme.cornerRadius = 0
@@ -21,19 +15,22 @@ Suit.theme.color = {
 
 local section = {}
 section.options = {
-    x = 0,
-    y = 0, 
-    width = 125
+    x = love.graphics.getWidth() / 2 - 125,
+    y = (love.graphics.getHeight() - 6*40) / 2, 
+    width = 250,
+    cellHeight = 40,
+    active = false
 }
-section.info = {
-    x = love.graphics.getWidth() - 125,
+section.actions = {
+    x = (love.graphics.getWidth() - 2 * 40) / 2,
     y = 0,
-    width = 125
+    width = 40
 }
 section.fractal = {
-    x = section.options.x + section.options.width,
-    y = 0, 
-    width = love.graphics.getWidth() - section.info.width - section.options.width
+    x = 0,
+    y = 0,
+    width = love.graphics.getWidth(),
+    height = love.graphics.getHeight()
 }
 
 -- input widgets
@@ -43,121 +40,88 @@ input.scale = {text = '0.5'}
 input.angle = {text = '60'}
 input.step = {text = '1'}
 input.branches = {text = '2'}
-input.duration = {text = tostring(Setting.animation.duration)}
-
--- checkbox widget
-local checkbox = {}
-checkbox.animation = {text = 'Enabled', checked = Setting.animation.enabled}
 
 -- default fractal
 local fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), 150, 0.5, math.rad(60), 2)
+
+local image = {}
+function love.load()
+    image.next = love.graphics.newImage('img/next.png')
+    image.nextHovered = love.graphics.newImage('img/next-hovered.png')
+    image.new = love.graphics.newImage('img/new.png')
+    image.newHovered = love.graphics.newImage('img/new-hovered.png')
+end
 
 function love.update(dt)
     Timer.update(dt)
 
     -- the gui layout
-    -- options section
-    Suit.layout:reset(section.options.x, section.options.y)
-
-    -- Panel: fractal settings
-    Suit.Label('Settings', Suit.layout:row(section.options.width, 40))
-
-    -- input for start length
-    Suit.layout:push(Suit.layout:row())
-        Suit.Label('Length', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
-        Suit.Input(input.length, Suit.layout:col(section.options.width * 0.4))
-    Suit.layout:pop()
-
-    -- input for scale
-    Suit.layout:push(Suit.layout:row())
-        Suit.Label('Scale', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
-        Suit.Input(input.scale, Suit.layout:col(section.options.width * 0.4))
-    Suit.layout:pop()
-
-    -- input for angle
-    Suit.layout:push(Suit.layout:row())
-        Suit.Label('Angle', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
-        Suit.Input(input.angle, Suit.layout:col(section.options.width * 0.4))
-    Suit.layout:pop()
-
-    -- input for branches
-    Suit.layout:push(Suit.layout:row())
-        Suit.Label('Branches per Iteration', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
-        Suit.Input(input.branches, Suit.layout:col(section.options.width * 0.4))
-    Suit.layout:pop()
-
-    -- button, which creates a new fractal with given scale and angle
-    if Suit.Button('New', Suit.layout:row()).hit then
-        fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), input.length.text, input.scale.text, math.rad(input.angle.text), input.branches.text)
+    -- Controlbar
+    Suit.layout:reset(section.actions.x, section.actions.y)
+    -- Button for creating new Fractal
+    if Suit.ImageButton(image.new, {hovered = image.newHovered}, Suit.layout:col(section.actions.width, 40)).hit then
+        section.options.active = not(section.options.active )
     end
-
-    -- Panel: actions
-    Suit.Label('Actions', Suit.layout:row())
-
-    -- input for iterating steps
-    Suit.layout:push(Suit.layout:row())
-        Suit.Label('Steps', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
-        Suit.Input(input.step, Suit.layout:col(section.options.width * 0.4))
-    Suit.layout:pop()
-
-    -- button, which iterates the fractal with the given steps
-    if Suit.Button('Iterate', Suit.layout:row()).hit then
-        if Setting.animation.enabled then
-            Timer.every(Setting.animation.duration, function() fractal:iterate() end, tonumber(input.step.text))
-        else
-            for i = 1, tonumber(input.step.text) do fractal:iterate() end
-        end
+    if Suit.ImageButton(image.next, {hovered = image.nextHovered}, Suit.layout:col()).hit then
+        fractal:iterate()
     end
+    
+    -- panel: new fractal
+    if  section.options.active then
+        Suit.layout:reset(section.options.x, section.options.y)
 
-    -- Panel: animation settings
-    Suit.Label('Animation', Suit.layout:row())
-
-    -- checkbox, which enables or disable animations
-    Suit.Checkbox(checkbox.animation, Suit.layout:row())
-
-    -- input for animation duration (if enabled)
-    if checkbox.animation.checked then
+        Suit.Label('New Fractal', Suit.layout:row(section.options.width, section.options.cellHeight))
+        -- input for start length
         Suit.layout:push(Suit.layout:row())
-            Suit.Label('Duration', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
-            Suit.Input(input.duration, Suit.layout:col(section.options.width * 0.4))
+            Suit.Label('Length', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+            Suit.Input(input.length, Suit.layout:col(section.options.width * 0.4))
         Suit.layout:pop()
+
+        -- input for scale
+        Suit.layout:push(Suit.layout:row())
+            Suit.Label('Scale', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+            Suit.Input(input.scale, Suit.layout:col(section.options.width * 0.4))
+        Suit.layout:pop()
+
+        -- input for angle
+        Suit.layout:push(Suit.layout:row())
+            Suit.Label('Angle', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+            Suit.Input(input.angle, Suit.layout:col(section.options.width * 0.4))
+        Suit.layout:pop()
+
+        -- input for branches
+        Suit.layout:push(Suit.layout:row())
+            Suit.Label('Branches per Iteration', {align = 'left'}, Suit.layout:col(section.options.width * 0.6, 40))
+            Suit.Input(input.branches, Suit.layout:col(section.options.width * 0.4))
+        Suit.layout:pop()
+
+        -- button, which creates a new fractal with given scale and angle
+        if Suit.Button('Create', Suit.layout:row()).hit then
+            fractal = Fractal(section.fractal.x + section.fractal.width / 2, love.graphics.getHeight(), input.length.text, input.scale.text, math.rad(input.angle.text), input.branches.text)
+            section.options.active = false
+        end
+
+        _, section.options.height = Suit.layout:nextRow()
     end
-
-    -- button, which applies duration and animation enabling to (node-)settings
-    if Suit.Button('Apply', Suit.layout:row()).hit then
-        Setting.animation.duration = tonumber(input.duration.text)
-        Node.animation.duration = tonumber(input.duration.text)
-        Setting.animation.enabled = checkbox.animation.checked
-        Node.animation.enabled = Setting.animation.enabled
-    end
-
-    _, section.options.height = Suit.layout:nextRow()
-
-    -- information section
-    Suit.layout:reset(section.info.x, section.info.y)
-    Suit.Label('Informations', Suit.layout:row(section.info.width, 40))
-    Suit.Label(string.format('Iteration: %s', fractal.iter), {align = 'left'}, Suit.layout:row())
-    Suit.Label(string.format('Nodes: %s', fractal:calcNodes()), {align = 'left'}, Suit.layout:row())
-    Suit.Label(string.format('Angle: %s', math.deg(fractal.angle)), {align = 'left'}, Suit.layout:row())
-    Suit.Label(string.format('Scale: %s', fractal.scale), {align = 'left'}, Suit.layout:row())
-    Suit.Label(string.format('Strain length: %s', fractal.len), {align = 'left'}, Suit.layout:row())
-
-    _, section.info.height = Suit.layout:nextRow()
 end
 
 function love.draw()
-    fractal:draw()
-    love.graphics.setColor({255, 255, 255})
-    love.graphics.rectangle('fill', section.options.x, section.options.y, section.options.width, section.options.height)
-    love.graphics.rectangle('fill', section.info.x, section.info.y, section.info.width, section.info.height)
     love.graphics.setBackgroundColor({231, 231, 231})
+    fractal:draw()
+    if section.options.active  then
+        love.graphics.setColor(200, 200, 200)
+        love.graphics.rectangle('fill', 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+    end
     Suit.draw()
 end
 
 function love.resize(width, height)
-    section.info.x = width - section.info.width
-    section.fractal.width = width - section.info.width - section.options.width
-    fractal:move(section.fractal.x + section.fractal.width / 2 - fractal.pos.x, height - fractal.pos.y)
+    -- move fractal
+    section.fractal.width = width
+    section.fractal.height = height
+    fractal:move(width / 2, height - fractal.pos.y)
+
+    -- move controllbar
 end
 
 function love.textinput(t)

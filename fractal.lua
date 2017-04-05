@@ -1,27 +1,14 @@
 -- Modules
 local Class = require('lib.middleclass')
 local Vector = require('lib.vector')
-local Timer = require('lib.timer')
 
 -- Objects
 -- Node
 local Node = Class('Node')
-Node.static.color = {0, 0, 0}
-Node.static.animation = {}
-Node.static.animation.enabled = false
-Node.static.animation.duration = 0.5
+Node.color = {0, 0, 0}
 function Node:initialize(pos, dim, width)
     self.pos = pos:clone()
     self.dim = dim:clone()
-
-    self.dimAnim = {x = 0, y = 0}
-
-    if Node.static.animation.enabled then
-        Timer.tween(Node.animation.duration, self, {dimAnim = {x = dim.x}})
-        Timer.tween(Node.animation.duration, self, {dimAnim = {y = dim.y}})
-    else
-        self.dimAnim = {x = dim.x, y = dim.y}
-    end 
 end
 
 function Node:unpack()
@@ -31,7 +18,7 @@ end
 function Node:draw()
     love.graphics.setLineWidth(1)
     love.graphics.setColor(Node.color)
-    love.graphics.line(self.pos.x, self.pos.y, self.pos.x + self.dimAnim.x, self.pos.y + self.dimAnim.y)
+    love.graphics.line(self.pos.x, self.pos.y, self.pos.x + self.dim.x, self.pos.y + self.dim.y)
 end
 
 -- Fractal
